@@ -2,9 +2,9 @@ package com.security.basic.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,23 +13,24 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = " _user")
-@Data
+@Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private Integer id;
-    private String firstname;
-    private String lastname;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idj;
+
+    private String name;
     private String email;
     private String password;
-    // at the moment to passing the role we need give a list or set
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated
     private Role role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,13 +38,13 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return email;
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
-    public String getPassword(){
-        return password;
+    public String getUsername() {
+        return this.email;
     }
 
     @Override
@@ -65,6 +66,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 
 }
